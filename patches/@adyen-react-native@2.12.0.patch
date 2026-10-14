@@ -1,0 +1,69 @@
+Fix for the embedded CardView of @adyen/react-native 2.12.0 on iOS, as a patch to the package itself.
+CardComponentViewProxy makes the embedded form ignore the safe area, which the page around it handles:
+  - it pins Adyen's scroll view to its view instead of the safe-area guide, so the form is no longer
+    cut short where it overlaps the home-indicator strip;
+  - it stops the form's layout margins from following the safe area, so the layout settles instead of
+    looping forever when the card mounts at or below the bottom edge.
+Only the embedded card changes; Drop-in and other full-screen forms keep their layout. See README.md.
+Apply from the repo root, after npm ci:
+  patch -p1 -d "$PWD/node_modules/@adyen/react-native" -i "$PWD/patches/@adyen-react-native@2.12.0.patch"
+
+diff --git a/ios/Helpers/UIViewHelper.swift b/ios/Helpers/UIViewHelper.swift
+index bf265e2..ad33610 100644
+--- a/ios/Helpers/UIViewHelper.swift
++++ b/ios/Helpers/UIViewHelper.swift
+@@ -17,6 +17,12 @@ extension UIView {
+         return nil
+     }
+ 
++    /// Stops this view and all the views inside it from growing their layout margins with the safe area.
++    func ignoreSafeAreaInLayoutMargins() {
++        insetsLayoutMarginsFromSafeArea = false
++        subviews.forEach { $0.ignoreSafeAreaInLayoutMargins() }
++    }
++
+     var parentViewController: UIViewController? {
+         var responder: UIResponder? = self
+         while let nextResponder = responder?.next {
+diff --git a/ios/Views/CardView/CardComponentViewProxy.swift b/ios/Views/CardView/CardComponentViewProxy.swift
+index bba831c..a59bf61 100644
+--- a/ios/Views/CardView/CardComponentViewProxy.swift
++++ b/ios/Views/CardView/CardComponentViewProxy.swift
+@@ -188,6 +188,37 @@ public final class CardComponentViewProxy: UIStackView {
+         formView.isScrollEnabled = false
+         formView.alwaysBounceVertical = false
+         formView.contentInsetAdjustmentBehavior = .never
++        ignoreSafeArea(scrollView: formView, in: cardView)
++    }
++
++    /// The form is laid out for a full screen: its scroll view is pinned inside the safe area, and the layout
++    /// margins of its views grow with the safe area. Embedded in a page, the card can sit in the bottom safe area
++    /// (the home indicator area). The scroll view was then shorter than the form, which cut off the bottom of the
++    /// form, and when the card mounted at or below the bottom edge of the screen, margins that followed the safe
++    /// area kept its layout from settling, which hung the main thread. The page around the card handles the safe
++    /// area, so the embedded form ignores it.
++    private func ignoreSafeArea(scrollView: UIScrollView, in cardView: UIView) {
++        if let container = scrollView.superview {
++            let guide = container.safeAreaLayoutGuide
++            let pinnedToSafeArea = container.constraints.filter {
++                ($0.firstItem === scrollView && $0.secondItem === guide) || ($0.firstItem === guide && $0.secondItem === scrollView)
++            }
++            NSLayoutConstraint.deactivate(pinnedToSafeArea)
++            NSLayoutConstraint.activate(pinnedToSafeArea.map { constraint in
++                let pinned = NSLayoutConstraint(
++                    item: constraint.firstItem === guide ? container : scrollView,
++                    attribute: constraint.firstAttribute,
++                    relatedBy: constraint.relation,
++                    toItem: constraint.secondItem === guide ? container : scrollView,
++                    attribute: constraint.secondAttribute,
++                    multiplier: constraint.multiplier,
++                    constant: constraint.constant
++                )
++                pinned.priority = constraint.priority
++                return pinned
++            })
++        }
++        cardView.ignoreSafeAreaInLayoutMargins()
+     }
+ 
+     // MARK: - Layout reporting

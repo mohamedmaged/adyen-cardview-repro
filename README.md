@@ -11,22 +11,26 @@ stock packages and Adyen's default styling, on iPhone 17 Pro simulators with iOS
    area (the bottom 34pt of an iPhone 17 Pro), that overlap is hidden. The Pay button loses its bottom 10pt and its
    rounded corners. The form stays cut wherever the page scrolls it afterwards.
 
-Both come from Adyen's form following the safe area while it is embedded in a page. A two-part patch to the Adyen
-iOS pod, [`patches/Adyen@5.25.1.patch`](patches/Adyen@5.25.1.patch), fixes both: see [The fix](#the-fix).
+Both come from Adyen's form following the safe area while it is embedded in a page. Making the embedded form
+ignore the safe area fixes both. The fix is two changes, and they work in either of two places: in
+`@adyen/react-native`, for the embedded card only
+([`patches/@adyen-react-native@2.12.0.patch`](patches/@adyen-react-native@2.12.0.patch)), or in the Adyen iOS pod
+([`patches/Adyen@5.25.1.patch`](patches/Adyen@5.25.1.patch)). See [The fix](#the-fix).
 
 <table>
   <tr>
     <th>Stock: the bottom of the form is cut off</th>
-    <th>With the patch</th>
+    <th>With the fix</th>
   </tr>
   <tr>
     <td><img src="evidence/readme/cut-stock.png" width="380" alt="Stock: the Pay button's bottom edge is cut off and square"></td>
-    <td><img src="evidence/readme/cut-patched.png" width="380" alt="Patched: the whole Pay button, with rounded corners"></td>
+    <td><img src="evidence/readme/cut-fixed.png" width="380" alt="Fixed: the whole Pay button, with rounded corners"></td>
   </tr>
 </table>
 
-These are the bottom of the screen in the `growIntoStrip` scenario on iOS 26.0. The full screenshots are
-[stock](evidence/stock-ios26.0/growIntoStrip.png) and [patched](evidence/patched-ios26.0/growIntoStrip.png).
+These are the bottom of the screen in the `growIntoStrip` scenario on iOS 26.0, with the fix in
+`@adyen/react-native`. The full screenshots are [stock](evidence/stock-ios26.0/growIntoStrip.png) and
+[fixed](evidence/fixed-ios26.0/growIntoStrip.png).
 The freeze has no picture: the app never draws its first frame, so its screenshot is plain white
 ([`bottomEdge.png`](evidence/stock-ios26.0/bottomEdge.png)).
 
@@ -142,9 +146,10 @@ Every run is a Release build, cold-launched and read 6 s after launch by `captur
 - **Cut**: Adyen's `UIScrollView` is 338pt for the 372pt form, so the bottom 34pt of the form are hidden.
 - **OK**: 0% CPU, and the scroll view is as tall as the form.
 
-"inset" is the bottom `safeAreaInsets` of `FormViewController.view`.
+"inset" is the bottom `safeAreaInsets` of `FormViewController.view`. "Fixed" is the same in both places the fix can
+go: in `@adyen/react-native` (`evidence/fixed-*`) and in the Adyen pod (`evidence/patched-*`).
 
-| Scenario | Stock, iOS 26.0 | Stock, iOS 26.3 | Patched, iOS 26.0 | Patched, iOS 26.3 |
+| Scenario | Stock, iOS 26.0 | Stock, iOS 26.3 | Fixed, iOS 26.0 | Fixed, iOS 26.3 |
 |---|---|---|---|---|
 | `middle` | OK (inset 0) | OK | OK | OK |
 | `strip` | **Freeze** at mount: the card view is at y 1000, still 0pt tall, before any scroll; inset 34 | **Freeze** | OK: card at y 502–874, inset 34, scroll view 372 | OK |
@@ -203,7 +208,9 @@ done; done; rm -rf evidence/rep
 
 ### Which part of the fix does what (iOS 26.0)
 
-| Scenario | Part A only: scroll view pinned to `view` | Part B only: margins ignore the safe area | Both: the patch |
+Measured with each part applied to the Adyen pod on its own ([`patches/parts/`](patches/parts)).
+
+| Scenario | Part A only: scroll view pinned to `view` | Part B only: margins ignore the safe area | Both |
 |---|---|---|---|
 | `middle` | OK | OK | OK |
 | `strip` | **Freeze** | **Cut** | OK |
@@ -262,55 +269,70 @@ done; done; rm -rf evidence/rep
 
 ## The fix
 
-[`patches/Adyen@5.25.1.patch`](patches/Adyen@5.25.1.patch) changes two files of the Adyen iOS pod, in two parts:
+The page around the card handles the safe area, so the embedded form should ignore it. That takes two changes:
 
-- **Part A** ([`A-scroll-view-pinned-to-view.patch`](patches/parts/A-scroll-view-pinned-to-view.patch)).
-  `FormViewController.setupLayout()` pins the scroll view to `view` instead of `view.safeAreaLayoutGuide`, and sets
-  `contentInsetAdjustmentBehavior = .always`. Full screen, the content inset still keeps the form clear of the safe
-  area. Embedded, the card view sets `.never`, so no part of the form is lost to it.
-- **Part B** ([`B-margins-ignore-safe-area.patch`](patches/parts/B-margins-ignore-safe-area.patch)).
-  `insetsLayoutMarginsFromSafeArea = false` on `FormViewController.view`, on its scroll view, and on every form
-  item and its subviews, from `FormView.appendItemView`.
+- **Part A: the scroll view fills its view.** Adyen's scroll view is pinned to `FormViewController.view` instead of
+  its `safeAreaLayoutGuide`, so no part of the form is lost where it overlaps the bottom safe area.
+- **Part B: margins ignore the safe area.** `insetsLayoutMarginsFromSafeArea = false` on the form's views, so their
+  layout margins stop growing in the safe area, and the layout settles.
 
 Both parts are needed. Part B alone fixes every freeze, but not the cut. Part A alone fixes the cut but adds
 freezes: once the scroll view is no longer cut short, the form's rows reach into the strip, so `growIntoStrip`,
-which stock only cut, freezes.
+which stock only cut, freezes (see [Which part of the fix does what](#which-part-of-the-fix-does-what-ios-260)).
 
-To try it, apply it to the pod after `npx expo prebuild`, rebuild and reinstall as in [Reproduce](#reproduce),
-then put the pod back to stock:
+The two parts work in either of two places, with the same results in all eight scenarios on both runtimes:
 
-```sh
-patch -p1 -d "$PWD/ios/Pods/Adyen" -i "$PWD/patches/Adyen@5.25.1.patch"
-# rebuild and reinstall
-patch -R -p1 -d "$PWD/ios/Pods/Adyen" -i "$PWD/patches/Adyen@5.25.1.patch"
-```
+- **In `@adyen/react-native`**, for the embedded card only:
+  [`patches/@adyen-react-native@2.12.0.patch`](patches/@adyen-react-native@2.12.0.patch). Right after it loads the
+  form, `CardComponentViewProxy`, which embeds it, re-pins the scroll view's four safe-area constraints to the view,
+  and turns off `insetsLayoutMarginsFromSafeArea` for all the form's views. Drop-in and the other full-screen forms
+  keep their layout. The evidence is in `evidence/fixed-ios26.0` and `evidence/fixed-ios26.3`.
+
+  ```sh
+  patch -p1 -d "$PWD/node_modules/@adyen/react-native" -i "$PWD/patches/@adyen-react-native@2.12.0.patch"
+  # rebuild and reinstall as in Reproduce; to undo, run patch -R with the same arguments
+  ```
+
+- **In the Adyen iOS pod**, for every form: [`patches/Adyen@5.25.1.patch`](patches/Adyen@5.25.1.patch), with each
+  part on its own in [`patches/parts/`](patches/parts). `FormViewController.setupLayout()` pins the scroll view to
+  `view` and sets `contentInsetAdjustmentBehavior = .always`, so a full-screen form still keeps its content clear
+  of the safe area through its content inset; embedded, the card view sets `.never`. Part B sets
+  `insetsLayoutMarginsFromSafeArea = false` on `FormViewController.view`, its scroll view, and every form item and
+  its subviews, from `FormView.appendItemView`. The evidence is in `evidence/patched-*`, `evidence/partA-ios26.0` and
+  `evidence/partB-ios26.0`.
+
+  ```sh
+  patch -p1 -d "$PWD/ios/Pods/Adyen" -i "$PWD/patches/Adyen@5.25.1.patch"
+  # rebuild and reinstall as in Reproduce; to undo, run patch -R with the same arguments
+  ```
+
+  In an app, a fresh `pod install` (on CI, for example) brings back the original files, so this patch has to be
+  applied after every install, for example from a `post_install` hook in the Podfile.
 
 Use absolute paths, because `patch -d` changes directory first. The pod's files are read-only, which `patch` copes
-with. Each part can be applied on its own the same way.
-
-In an app, a fresh `pod install` (on CI, for example) brings back the original files. So the patch has to be
-applied after every install, for example from a `post_install` hook in the Podfile.
+with.
 
 ## Also noticed
 
 - **The keyboard opens on its own.** Adyen's form takes the cursor as soon as it appears
   (`assignInitialFirstResponder` in `FormViewController.viewDidAppear`). On a device, the keyboard opens when an
-  inline card view appears, even below the fold, and the page scrolls to the focused field. With the patch, in
+  inline card view appears, even below the fold, and the page scrolls to the focused field. With the fix, in
   `belowFold`, the card moved from y 1000 to y 816 by itself.
 
 ## Not tested
 
 - A physical device.
 - Other iPhones, landscape, or a custom `AdyenAppearance`.
-- Full-screen uses of `FormViewController` (Drop-in and the other components) with the patch. They rely on
-  `contentInsetAdjustmentBehavior = .always` to keep the content clear of the safe area, which this repro doesn't
-  exercise.
+- Full-screen uses of `FormViewController` (Drop-in and the other components) with the fix in the Adyen pod. They
+  rely on `contentInsetAdjustmentBehavior = .always` to keep the content clear of the safe area, which this repro
+  doesn't exercise. The fix in `@adyen/react-native` doesn't touch them.
 
 ## Evidence
 
-[`evidence/`](evidence) has one folder per build and simulator: `stock-ios26.0`, `stock-ios26.3`,
-`patched-ios26.0`, `patched-ios26.3`, and `partA-ios26.0` and `partB-ios26.0` for each part of the fix alone. For
-each scenario, `capture.sh` saves:
+[`evidence/`](evidence) has one folder per build and simulator: `stock-ios26.0` and `stock-ios26.3`;
+`fixed-ios26.0` and `fixed-ios26.3`, with the fix in `@adyen/react-native`; `patched-ios26.0` and `patched-ios26.3`,
+with the fix in the Adyen pod; and `partA-ios26.0` and `partB-ios26.0`, with each part of the pod fix on its own.
+For each scenario, `capture.sh` saves:
 
 | File | What |
 |---|---|
@@ -333,7 +355,7 @@ Paths under the home folder are written as `/Users/USER`, the way `sample` write
 | [`App.tsx`](App.tsx) | The app, with every scenario |
 | [`capture.sh`](capture.sh) | Runs a scenario and saves the evidence |
 | [`app.json`](app.json) | Expo config: the `@adyen/react-native` plugin, scheme `adyenrepro`, bundle id `com.example.adyencardviewrepro` |
-| [`patches/`](patches) | The fix, and each of its parts on its own |
+| [`patches/`](patches) | The fix in `@adyen/react-native` and in the Adyen pod, and each part of the pod fix on its own |
 | [`evidence/`](evidence) | The results, by build and simulator |
 
 `ios/` (made by `npx expo prebuild`) and `build/` are not in git.

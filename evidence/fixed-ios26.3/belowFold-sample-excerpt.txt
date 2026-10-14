@@ -1,0 +1,96 @@
+Analysis of sampling AdyenRepro (pid 79572) every 1 millisecond
+Process:         AdyenRepro [79572]
+Path:            /Users/USER/Library/Developer/CoreSimulator/Devices/26430415-A44F-4B9B-AEC5-0A4BEC0E7958/data/Containers/Bundle/Application/21BE8E12-C46E-4FC2-845C-48ED9E785E8E/AdyenRepro.app/AdyenRepro
+Load Address:    0x104c30000
+Identifier:      com.example.adyencardviewrepro
+Version:         1.0.0 (1)
+Code Type:       ARM64
+Platform:        iOS Simulator
+Parent Process:  launchd_sim [76496]
+Target Type:     live task
+
+Date/Time:       2026-10-14 16:56:21.373 +0400
+Launch Time:     2026-10-14 16:55:54.468 +0400
+OS Version:      macOS 26.5 (25F71)
+Report Version:  7
+Analysis Tool:   /usr/bin/sample
+Call graph:
+    1676 Thread_28891461   DispatchQueue_1: com.apple.main-thread  (serial)
+    + 1676 start  (in dyld) + 6992  [0x1058afe00]
+    +   1676 start_sim  (in dyld_sim) + 20  [0x1057b53d0]
+    +     1676 main  (in AdyenRepro) + 116  [0x104c3368c]  AppDelegate.swift:0
+    +       1676 ???  (in UIKitCore)  load address 0x18525e000 + 0x3e16b8  [0x18563f6b8]
+    +         1676 UIApplicationMain  (in UIKitCore) + 124  [0x18640e42c]
+    +           1676 -[UIApplication _run]  (in UIKitCore) + 772  [0x18640a204]
+    +             1676 GSEventRunModal  (in GraphicsServices) + 116  [0x192b809bc]
+    +               1676 _CFRunLoopRunSpecificWithOptions  (in CoreFoundation) + 496  [0x18044fdbc]
+    +                 1674 __CFRunLoopRun  (in CoreFoundation) + 1128  [0x180454e8c]
+    +                 ! 1674 __CFRunLoopServiceMachPort  (in CoreFoundation) + 156  [0x180455cd4]
+    +                 !   1674 mach_msg  (in libsystem_kernel.dylib) + 20  [0x105af8ef0]
+    +                 !     1674 mach_msg_overwrite  (in libsystem_kernel.dylib) + 484  [0x105b00c44]
+    +                 !       1674 mach_msg2_internal  (in libsystem_kernel.dylib) + 72  [0x105b09e5c]
+    +                 !         1674 mach_msg2_trap  (in libsystem_kernel.dylib) + 8  [0x105af8b70]
+    +                 2 __CFRunLoopRun  (in CoreFoundation) + 1884  [0x180455180]
+    +                   2 __CFRUNLOOP_IS_SERVICING_THE_MAIN_DISPATCH_QUEUE__  (in CoreFoundation) + 12  [0x180455fa8]
+    +                     2 _dispatch_main_queue_callback_4CF  (in libdispatch.dylib) + 40  [0x1801cfe6c]
+    +                       2 _dispatch_main_queue_drain  (in libdispatch.dylib) + 1184  [0x1801d031c]
+    +                         2 <deduplicated_symbol>  (in libdispatch.dylib) + 24  [0x1801f74a0]
+    +                           2 _dispatch_client_callout  (in libdispatch.dylib) + 12  [0x1801db4b0]
+    +                             2 _dispatch_block_async_invoke2  (in libdispatch.dylib) + 104  [0x1801d0b14]
+    +                               2 ???  (in libsystem_notify.dylib)  load address 0x1833f9000 + 0x2c7c  [0x1833fbc7c]
+    +                                 2 __96-[_CFXPreferences(SourceAdditions) withSourceForIdentifier:user:byHost:container:cloud:perform:]_block_invoke_3  (in CoreFoundation) + 92  [0x1804ae998]
+    +                                   2 CFNotificationCenterPostNotificationWithOptions  (in CoreFoundation) + 128  [0x18041fbc8]
+    +                                     2 _CFXNotificationPost  (in CoreFoundation) + 696  [0x18041efbc]
+    +                                       2 _CFXRegistrationPost  (in CoreFoundation) + 404  [0x18041f5d0]
+    +                                         2 ___CFXRegistrationPost_block_invoke  (in CoreFoundation) + 88  [0x1804200e8]
+    +                                           2 __CFNOTIFICATIONCENTER_IS_CALLING_OUT_TO_AN_OBSERVER__  (in CoreFoundation) + 140  [0x1804201c4]
+    +                                             2 -[RCTSettingsManager userDefaultsDidChange:]  (in React) + 88  [0x108067608]
+    +                                               2 -[NSUserDefaults(NSUserDefaults) dictionaryRepresentation]  (in Foundation) + 44  [0x181146fdc]
+    +                                                 2 _CFPrefsCopyAppDictionaryWithContainer  (in CoreFoundation) + 88  [0x18055ea84]
+    +                                                   2 -[_CFXPreferences copyDictionaryForApp:withContainer:]  (in CoreFoundation) + 120  [0x18055c72c]
+    +                                                     2 -[_CFXPreferences withSearchListForIdentifier:container:cloudConfigurationURL:perform:]  (in CoreFoundation) + 136  [0x180582e8c]
+    +                                                       2 normalizeQuintuplet  (in CoreFoundation) + 396  [0x180521fa8]
+    +                                                         2 __108-[_CFXPreferences(SearchListAdditions) withSearchListForIdentifier:container:cloudConfigurationURL:perform:]_block_invoke  (in CoreFoundation) + 348  [0x180522714]
+    +                                                           2 __54-[_CFXPreferences copyDictionaryForApp:withContainer:]_block_invoke  (in CoreFoundation) + 24  [0x18055c7f4]
+    +                                                             2 -[CFPrefsSource copyDictionary]  (in CoreFoundation) + 28  [0x18057cd18]
+    +                                                               2 -[CFPrefsSearchListSource alreadylocked_copyDictionary]  (in CoreFoundation) + 112  [0x1805212f0]
+    +                                                                 2 -[CFPrefsSearchListSource alreadylocked_getDictionary:]  (in CoreFoundation) + 412  [0x1805826e4]
+    +                                                                   1 -[CFPrefsSearchListSource alreadylocked_generationCountFromListOfSources:count:]  (in CoreFoundation) + 148  [0x180582c48]
+    +                                                                   : 1 -[CFPrefsSearchListSource createRequestNewContentMessageForDaemon:]  (in CoreFoundation) + 192  [0x1805209a4]
+    +                                                                   :   1 _os_unfair_lock_lock_slow  (in libsystem_platform.dylib) + 168  [0x10571d258]
+    +                                                                   :     1 __ulock_wait2  (in libsystem_kernel.dylib) + 8  [0x105b05b04]
+    +                                                                   1 -[CFPrefsSearchListSource alreadylocked_generationCountFromListOfSources:count:]  (in CoreFoundation) + 256  [0x180582cb4]
+    +                                                                     1 -[CFPrefsSearchListSource synchronouslySendSystemMessage:andUserMessage:andDirectMessage:replyHandler:]  (in CoreFoundation) + 276  [0x1805820e4]
+    +                                                                       1 CFPREFERENCES_IS_WAITING_FOR_USER_CFPREFSD  (in CoreFoundation) + 92  [0x180520bc0]
+    +                                                                         1 __103-[CFPrefsSearchListSource synchronouslySendSystemMessage:andUserMessage:andDirectMessage:replyHandler:]_block_invoke  (in CoreFoundation) + 112  [0x180520cd4]
+    +                                                                           1 -[_CFXPreferences withConnectionForRole:andUserIdentifier:performBlock:]  (in CoreFoundation) + 44  [0x180587a84]
+    +                                                                             1 __103-[CFPrefsSearchListSource synchronouslySendSystemMessage:andUserMessage:andDirectMessage:replyHandler:]_block_invoke_2  (in CoreFoundation) + 40  [0x180520d24]
+    +                                                                               1 xpc_connection_send_message_with_reply_sync  (in libxpc.dylib) + 252  [0x18010798c]
+    +                                                                                 1 dispatch_mach_send_with_result_and_wait_for_reply  (in libdispatch.dylib) + 56  [0x1801dcfbc]
+    +                                                                                   1 _dispatch_mach_send_and_wait_for_reply  (in libdispatch.dylib) + 564  [0x1801dcc20]
+    +                                                                                     1 mach_msg  (in libsystem_kernel.dylib) + 20  [0x105af8ef0]
+    +                                                                                       1 mach_msg_overwrite  (in libsystem_kernel.dylib) + 484  [0x105b00c44]
+    +                                                                                         1 mach_msg2_internal  (in libsystem_kernel.dylib) + 72  [0x105b09e5c]
+    +                                                                                           1 mach_msg2_trap  (in libsystem_kernel.dylib) + 8  [0x105af8b70]
+    1676 Thread_28891585: com.apple.uikit.eventfetch-thread
+    + 1676 thread_start  (in libsystem_pthread.dylib) + 8  [0x105e01a34]
+[...]
+Sort by top of stack, same collapsed (when >= 5):
+        mach_msg2_trap  (in libsystem_kernel.dylib)        7938
+        __workq_kernreturn  (in libsystem_kernel.dylib)        1759
+        __psynch_cvwait  (in libsystem_kernel.dylib)        1676
+        __ulock_wake  (in libsystem_kernel.dylib)        340
+        read  (in libsystem_kernel.dylib)        15
+
+Binary Images:
+       0x104c30000 -        0x104fdab6f +com.example.adyencardviewrepro (1.0.0 - 1) <66EFB0ED-16F0-37E6-850B-5046737C8D49> /Users/*/Library/Developer/CoreSimulator/Devices/26430415-A44F-4B9B-AEC5-0A4BEC0E7958/data/Containers/Bundle/Application/21BE8E12-C46E-4FC2-845C-48ED9E785E8E/AdyenRepro.app/AdyenRepro
+       0x10571c000 -        0x1057243d3  libsystem_platform.dylib (375.120.2) <0831B8D2-190F-31FC-9EB6-EA8BA11FE47B> /usr/lib/system/libsystem_platform.dylib
+       0x105780000 -        0x10578a22f +expofont.ExpoFont (1.0 - 1) <7F8CBE27-E191-34B8-AD1F-809D3D071B64> /Users/*/Library/Developer/CoreSimulator/Devices/26430415-A44F-4B9B-AEC5-0A4BEC0E7958/data/Containers/Bundle/Application/21BE8E12-C46E-4FC2-845C-48ED9E785E8E/AdyenRepro.app/Frameworks/ExpoFont.framework/ExpoFont
+       0x1057b4000 -        0x10580198f +dyld_sim (1340.1) <86541D4D-F56F-3EC9-9358-583E723A7068> /Volumes/*/dyld_sim
+       0x105890000 -        0x105936217  dyld (1.0.0 - 1378) <A237EF81-B68B-37BA-A165-92C965529534> /usr/lib/dyld
+       0x1059d0000 -        0x105a1f4a7 +expofilesystem.ExpoFileSystem (1.0 - 1) <49E17346-2006-3580-B58A-771E38C32863> /Users/*/Library/Developer/CoreSimulator/Devices/26430415-A44F-4B9B-AEC5-0A4BEC0E7958/data/Containers/Bundle/Application/21BE8E12-C46E-4FC2-845C-48ED9E785E8E/AdyenRepro.app/Frameworks/ExpoFileSystem.framework/ExpoFileSystem
+[...] Lines of the full sample that name:
+  attachChildViewControllerIfNeeded: 0
+  _updateInferredLayoutMarginsFromSuperview: 0
+  _UIViewAdjustedLayoutMarginsForLayoutMargins: 0
+  _safeAreaInsetsForFrame:inSuperview:: 0
