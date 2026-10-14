@@ -1,0 +1,19 @@
+Part A of patches/Adyen@5.25.1.patch only: FormViewController pins its scroll view to its view instead of
+the safe-area guide. On its own it fixes the cut-off form but turns some cut forms into freezes; see README.md.
+
+diff -ru a/Adyen/UI/Form/FormViewController.swift b/Adyen/UI/Form/FormViewController.swift
+--- a/Adyen/UI/Form/FormViewController.swift	2026-10-14 12:15:27
++++ b/Adyen/UI/Form/FormViewController.swift	2026-10-14 12:15:27
+@@ -264,7 +264,11 @@
+ 
+     private func setupLayout() {
+         if scrollEnabled {
+-            scrollView.adyen.anchor(inside: view.safeAreaLayoutGuide)
++            // Patched: the scroll view fills the view and keeps its content clear of the safe area through its
++            // content inset, instead of being pinned inside the safe area. Embedded in a page (the React Native
++            // CardView turns that inset off), the safe area cut the form short at the bottom of the screen.
++            scrollView.adyen.anchor(inside: view)
++            scrollView.contentInsetAdjustmentBehavior = .always
+ 
+             NSLayoutConstraint.activate([
+                 formView.topAnchor.constraint(equalTo: scrollView.topAnchor),

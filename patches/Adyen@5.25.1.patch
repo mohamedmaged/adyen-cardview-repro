@@ -1,0 +1,55 @@
+Fix for the embedded CardView of @adyen/react-native 2.12.0 on iOS, as a patch to the Adyen iOS pod 5.25.1.
+Adyen's form follows the safe area, which suits it full screen but breaks it when it is embedded in a page:
+  Part A. FormViewController pins its scroll view to its view instead of the safe-area guide, so the
+          form is no longer cut short where it overlaps the home-indicator strip.
+  Part B. Layout margins stop following the safe area (insetsLayoutMarginsFromSafeArea = false), so the
+          layout settles instead of looping forever when the form mounts at or below the bottom edge.
+Both parts are needed: Part A alone turns some cut forms into freezes. See README.md.
+Apply from the repo root, after pod install:
+  patch -p1 -d "$PWD/ios/Pods/Adyen" -i "$PWD/patches/Adyen@5.25.1.patch"
+
+diff -ru a/Adyen/UI/Form/FormView.swift b/Adyen/UI/Form/FormView.swift
+--- a/Adyen/UI/Form/FormView.swift	2026-10-14 12:15:27
++++ b/Adyen/UI/Form/FormView.swift	2026-10-14 12:15:27
+@@ -46,6 +46,13 @@
+     /// - Parameter itemView: The item view to append.
+     internal func appendItemView(_ itemView: UIView) {
+         stackView.addArrangedSubview(itemView)
++        // Patched: see FormViewController.setupViews.
++        ignoreSafeAreaInMargins(of: self)
++    }
++
++    private func ignoreSafeAreaInMargins(of view: UIView) {
++        view.insetsLayoutMarginsFromSafeArea = false
++        view.subviews.forEach(ignoreSafeAreaInMargins)
+     }
+ 
+     // MARK: - Private
+diff -ru a/Adyen/UI/Form/FormViewController.swift b/Adyen/UI/Form/FormViewController.swift
+--- a/Adyen/UI/Form/FormViewController.swift	2026-10-14 12:15:27
++++ b/Adyen/UI/Form/FormViewController.swift	2026-10-14 12:15:27
+@@ -264,7 +264,11 @@
+ 
+     private func setupLayout() {
+         if scrollEnabled {
+-            scrollView.adyen.anchor(inside: view.safeAreaLayoutGuide)
++            // Patched: the scroll view fills the view and keeps its content clear of the safe area through its
++            // content inset, instead of being pinned inside the safe area. Embedded in a page (the React Native
++            // CardView turns that inset off), the safe area cut the form short at the bottom of the screen.
++            scrollView.adyen.anchor(inside: view)
++            scrollView.contentInsetAdjustmentBehavior = .always
+ 
+             NSLayoutConstraint.activate([
+                 formView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+@@ -281,6 +285,11 @@
+         view.backgroundColor = style.backgroundColor
+         formView.backgroundColor = style.backgroundColor
+         formView.isEmbeddedInScrollView = scrollEnabled
++        // Patched: layout margins never grow with the safe area (FormView does the same for every item).
++        // Embedded in a page, margins that followed the safe area made the form's views in or below the
++        // home-indicator strip grow, move and be measured again without end, which hung the app.
++        view.insetsLayoutMarginsFromSafeArea = false
++        scrollView.insetsLayoutMarginsFromSafeArea = false
+     }
+ 
+     // MARK: - UIResponder

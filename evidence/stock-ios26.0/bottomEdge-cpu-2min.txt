@@ -1,0 +1,6 @@
+stock bottomEdge, iOS 26.0: CPU % of the app's process (ps -o %cpu=), seconds after launch
+t=+10s cpu=99.0
+t=+30s cpu=100.0
+t=+60s cpu=98.8
+t=+120s cpu=100.0
+a 1 s sample at t=+120s: 646 of 646 main-thread samples are inside CardComponentViewProxy.attachChildViewControllerIfNeeded()

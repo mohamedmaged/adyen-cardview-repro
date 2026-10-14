@@ -1,0 +1,20 @@
+Stock build (binary 379449ee3209fec3c7ab341a01fc1604), iOS 26.0, scenario bottomEdge, frozen at 100% CPU.
+The same views read at 8 separate stops of the frozen app (a new `xcrun lldb --batch -p <pid>` each time),
+calling frame, layoutMargins and safeAreaInsets through objc_msgSend with plain structs, as capture.sh does:
+
+  form  = Adyen.FormView
+  row   = Adyen.FormButtonItemView (the Pay button's row; the button is pinned inside its layoutMarginsGuide)
+
+stop 1: form h=382 | row y=290 h=76 | row layoutMargins top=8 bottom=26 | row safeAreaInsets bottom=10
+stop 2: form h=382 | row y=290 h=76 | row layoutMargins top=8 bottom=18 | row safeAreaInsets bottom=10
+stop 3: form h=382 | row y=290 h=76 | row layoutMargins top=8 bottom=18 | row safeAreaInsets bottom=10
+stop 4: form h=382 | row y=290 h=76 | row layoutMargins top=8 bottom=18 | row safeAreaInsets bottom=10
+stop 5: form h=382 | row y=290 h=76 | row layoutMargins top=8 bottom=18 | row safeAreaInsets bottom=10
+stop 6: form h=382 | row y=290 h=76 | row layoutMargins top=8 bottom=18 | row safeAreaInsets bottom=10
+stop 7: form h=382 | row y=290 h=76 | row layoutMargins top=8 bottom=26 | row safeAreaInsets bottom=10
+stop 8: form h=382 | row y=290 h=76 | row layoutMargins top=8 bottom=26 | row safeAreaInsets bottom=10
+
+The frames and the safe-area inset hold still; the row's bottom margin keeps flipping between 18 and 26.
+
+For comparison, scenario middle (not frozen), read the same way:
+        form h=372 | row y=290 h=66 | row layoutMargins top=8 bottom=8 (8 on every side) | row safeAreaInsets bottom=0

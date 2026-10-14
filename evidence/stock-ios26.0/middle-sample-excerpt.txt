@@ -1,0 +1,96 @@
+Analysis of sampling AdyenRepro (pid 73266) every 1 millisecond
+Process:         AdyenRepro [73266]
+Path:            /Users/USER/Library/Developer/CoreSimulator/Devices/8353A9E2-18C3-4212-B592-1A2F65BC8021/data/Containers/Bundle/Application/DC2F2FCF-138A-49B3-A1D5-1A84843196BF/AdyenRepro.app/AdyenRepro
+Load Address:    0x100870000
+Identifier:      com.example.adyencardviewrepro
+Version:         1.0.0 (1)
+Code Type:       ARM64
+Platform:        iOS Simulator
+Parent Process:  launchd_sim [85822]
+Target Type:     live task
+
+Date/Time:       2026-10-12 22:25:26.422 +0400
+Launch Time:     2026-10-12 22:25:14.019 +0400
+OS Version:      macOS 26.5 (25F71)
+Report Version:  7
+Analysis Tool:   /usr/bin/sample
+Call graph:
+    1530 Thread_21287104   DispatchQueue_1: com.apple.main-thread  (serial)
+    + 1530 start  (in dyld) + 6992  [0x10172be00]
+    +   1530 start_sim  (in dyld_sim) + 20  [0x1013f53d0]
+    +     1530 main  (in AdyenRepro) + 116  [0x10087368c]  AppDelegate.swift:0
+    +       1530 ???  (in UIKitCore)  load address 0x185156000 + 0x386098  [0x1854dc098]
+    +         1530 UIApplicationMain  (in UIKitCore) + 124  [0x186263e64]
+    +           1530 -[UIApplication _run]  (in UIKitCore) + 772  [0x18625fc3c]
+    +             1530 GSEventRunModal  (in GraphicsServices) + 116  [0x1925319bc]
+    +               1530 _CFRunLoopRunSpecificWithOptions  (in CoreFoundation) + 496  [0x180446e24]
+    +                 1530 __CFRunLoopRun  (in CoreFoundation) + 1128  [0x18044bef4]
+    +                   1530 __CFRunLoopServiceMachPort  (in CoreFoundation) + 156  [0x18044cd3c]
+    +                     1530 mach_msg  (in libsystem_kernel.dylib) + 20  [0x101624ef0]
+    +                       1530 mach_msg_overwrite  (in libsystem_kernel.dylib) + 484  [0x10162cc44]
+    +                         1530 mach_msg2_internal  (in libsystem_kernel.dylib) + 72  [0x101635e5c]
+    +                           1530 mach_msg2_trap  (in libsystem_kernel.dylib) + 8  [0x101624b70]
+    1530 Thread_21287129: com.apple.uikit.eventfetch-thread
+    + 1530 thread_start  (in libsystem_pthread.dylib) + 8  [0x102469a34]
+    +   1530 _pthread_start  (in libsystem_pthread.dylib) + 104  [0x10246e63c]
+    +     1530 __NSThread__start__  (in Foundation) + 716  [0x181118b78]
+    +       1530 -[UIEventFetcher threadMain]  (in UIKitCore) + 392  [0x1863170f8]
+    +         1530 -[NSRunLoop(NSRunLoop) runUntilDate:]  (in Foundation) + 60  [0x1810f1ecc]
+    +           1530 -[NSRunLoop(NSRunLoop) runMode:beforeDate:]  (in Foundation) + 208  [0x1810f1cac]
+    +             1530 _CFRunLoopRunSpecificWithOptions  (in CoreFoundation) + 496  [0x180446e24]
+    +               1530 __CFRunLoopRun  (in CoreFoundation) + 1128  [0x18044bef4]
+    +                 1530 __CFRunLoopServiceMachPort  (in CoreFoundation) + 156  [0x18044cd3c]
+    +                   1530 mach_msg  (in libsystem_kernel.dylib) + 20  [0x101624ef0]
+    +                     1530 mach_msg_overwrite  (in libsystem_kernel.dylib) + 484  [0x10162cc44]
+    +                       1530 mach_msg2_internal  (in libsystem_kernel.dylib) + 72  [0x101635e5c]
+    +                         1530 mach_msg2_trap  (in libsystem_kernel.dylib) + 8  [0x101624b70]
+    1530 Thread_21287137
+    + 1530 start_wqthread  (in libsystem_pthread.dylib) + 8  [0x102469a28]
+    +   1530 _pthread_wqthread  (in libsystem_pthread.dylib) + 364  [0x10246ac74]
+    +     1530 __workq_kernreturn  (in libsystem_kernel.dylib) + 8  [0x101626698]
+    1530 Thread_21287153: com.facebook.react.runtime.JavaScript
+    + 1530 thread_start  (in libsystem_pthread.dylib) + 8  [0x102469a34]
+    +   1530 _pthread_start  (in libsystem_pthread.dylib) + 104  [0x10246e63c]
+    +     1530 __NSThread__start__  (in Foundation) + 716  [0x181118b78]
+    +       1530 +[RCTJSThreadManager runRunLoop]  (in React) + 252  [0x103dc5dd4]
+    +         1530 _CFRunLoopRunSpecificWithOptions  (in CoreFoundation) + 496  [0x180446e24]
+    +           1530 __CFRunLoopRun  (in CoreFoundation) + 1128  [0x18044bef4]
+    +             1530 __CFRunLoopServiceMachPort  (in CoreFoundation) + 156  [0x18044cd3c]
+    +               1530 mach_msg  (in libsystem_kernel.dylib) + 20  [0x101624ef0]
+    +                 1530 mach_msg_overwrite  (in libsystem_kernel.dylib) + 484  [0x10162cc44]
+    +                   1530 mach_msg2_internal  (in libsystem_kernel.dylib) + 72  [0x101635e5c]
+    +                     1530 mach_msg2_trap  (in libsystem_kernel.dylib) + 8  [0x101624b70]
+    1530 Thread_21287154: hades
+    + 1530 thread_start  (in libsystem_pthread.dylib) + 8  [0x102469a34]
+    +   1530 _pthread_start  (in libsystem_pthread.dylib) + 104  [0x10246e63c]
+    +     1530 std::__thread_proxy[abi:nn190102]<std::tuple<std::unique_ptr<std::__thread_struct>, hermes::vm::HadesGC::Executor::Executor()::'lambda'()>>(void*)  (in hermesvm) + 44  [0x101d16fd8]
+    +       1530 hermes::vm::HadesGC::Executor::worker()  (in hermesvm) + 104  [0x101d17064]
+    +         1530 std::condition_variable::wait(std::unique_lock<std::mutex>&)  (in libc++.1.dylib) + 28  [0x18032c70c]
+    +           1530 _pthread_cond_wait  (in libsystem_pthread.dylib) + 972  [0x10246eb00]
+    +             1530 __psynch_cvwait  (in libsystem_kernel.dylib) + 8  [0x10162802c]
+    1530 Thread_21287183: com.apple.NSURLConnectionLoader
+      1530 thread_start  (in libsystem_pthread.dylib) + 8  [0x102469a34]
+        1530 _pthread_start  (in libsystem_pthread.dylib) + 104  [0x10246e63c]
+          1530 __NSThread__start__  (in Foundation) + 716  [0x181118b78]
+            1530 +[__CFN_CoreSchedulingSetRunnable _run:]  (in CFNetwork) + 368  [0x184e8590c]
+              1530 _CFRunLoopRunSpecificWithOptions  (in CoreFoundation) + 496  [0x180446e24]
+[...]
+Sort by top of stack, same collapsed (when >= 5):
+        mach_msg2_trap  (in libsystem_kernel.dylib)        6120
+        __psynch_cvwait  (in libsystem_kernel.dylib)        1530
+        __workq_kernreturn  (in libsystem_kernel.dylib)        1530
+
+Binary Images:
+       0x100870000 -        0x100c1a2d7 +com.example.adyencardviewrepro (1.0.0 - 1) <B332A399-0FC5-3F61-8F56-AF180FD18554> /Users/*/Library/Developer/CoreSimulator/Devices/8353A9E2-18C3-4212-B592-1A2F65BC8021/data/Containers/Bundle/Application/DC2F2FCF-138A-49B3-A1D5-1A84843196BF/AdyenRepro.app/AdyenRepro
+       0x10135c000 -        0x1013643d3  libsystem_platform.dylib (375.120.2) <0831B8D2-190F-31FC-9EB6-EA8BA11FE47B> /usr/lib/system/libsystem_platform.dylib
+       0x1013c0000 -        0x1013ca22f +expofont.ExpoFont (1.0 - 1) <7F8CBE27-E191-34B8-AD1F-809D3D071B64> /Users/*/Library/Developer/CoreSimulator/Devices/8353A9E2-18C3-4212-B592-1A2F65BC8021/data/Containers/Bundle/Application/DC2F2FCF-138A-49B3-A1D5-1A84843196BF/AdyenRepro.app/Frameworks/ExpoFont.framework/ExpoFont
+       0x1013f4000 -        0x10144152f +dyld_sim (1323.3) <488CD2C7-4DA1-3D87-900D-B2C901C6A8A4> /Volumes/*/dyld_sim
+       0x1014b0000 -        0x1014b5b77 +expomodulesworklets.ExpoModulesWorklets (1.0 - 1) <F02A778D-46EE-3652-8268-8FC4A9666DD9> /Users/*/Library/Developer/CoreSimulator/Devices/8353A9E2-18C3-4212-B592-1A2F65BC8021/data/Containers/Bundle/Application/DC2F2FCF-138A-49B3-A1D5-1A84843196BF/AdyenRepro.app/Frameworks/ExpoModulesWorklets.framework/ExpoModulesWorklets
+       0x1014d8000 -        0x101557803 +third-party.ReactNativeDependencies (1.0 - 1) <27E31DA0-D580-3E9B-A1F7-820565607ACE> /Users/*/Library/Developer/CoreSimulator/Devices/8353A9E2-18C3-4212-B592-1A2F65BC8021/data/Containers/Bundle/Application/DC2F2FCF-138A-49B3-A1D5-1A84843196BF/AdyenRepro.app/Frameworks/ReactNativeDependencies.framework/ReactNativeDependencies
+       0x101624000 -        0x10165ee9f  libsystem_kernel.dylib (12377.121.6) <856091DF-DF82-3985-9695-28EAC306BCB5> /usr/lib/system/libsystem_kernel.dylib
+       0x10170c000 -        0x1017b2217  dyld (1.0.0 - 1378) <A237EF81-B68B-37BA-A165-92C965529534> /usr/lib/dyld
+[...] Lines of the full sample that name:
+  attachChildViewControllerIfNeeded: 0
+  _updateInferredLayoutMarginsFromSuperview: 0
+  _UIViewAdjustedLayoutMarginsForLayoutMargins: 0
+  _safeAreaInsetsForFrame:inSuperview:: 0

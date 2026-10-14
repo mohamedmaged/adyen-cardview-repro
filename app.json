@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "AdyenRepro",
+    "slug": "adyen-cardview-repro",
+    "version": "1.0.0",
+    "scheme": "adyenrepro",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "bundleIdentifier": "com.example.adyencardviewrepro",
+      "supportsTablet": false
+    },
+    "plugins": ["@adyen/react-native"]
+  }
+}

@@ -1,0 +1,2 @@
+card view frame in window: (x = 0, y = 1000, width = 402, height = 0)
+FormViewController.view safeAreaInsets: (top = 0, left = 0, bottom = 34, right = 0)

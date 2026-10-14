@@ -1,0 +1,35 @@
+Part B of patches/Adyen@5.25.1.patch only: layout margins stop following the safe area
+(insetsLayoutMarginsFromSafeArea = false). On its own it fixes the freeze but not the cut-off form; see README.md.
+
+diff -ru a/Adyen/UI/Form/FormView.swift b/Adyen/UI/Form/FormView.swift
+--- a/Adyen/UI/Form/FormView.swift	2026-10-14 12:15:27
++++ b/Adyen/UI/Form/FormView.swift	2026-10-14 12:15:27
+@@ -46,6 +46,13 @@
+     /// - Parameter itemView: The item view to append.
+     internal func appendItemView(_ itemView: UIView) {
+         stackView.addArrangedSubview(itemView)
++        // Patched: see FormViewController.setupViews.
++        ignoreSafeAreaInMargins(of: self)
++    }
++
++    private func ignoreSafeAreaInMargins(of view: UIView) {
++        view.insetsLayoutMarginsFromSafeArea = false
++        view.subviews.forEach(ignoreSafeAreaInMargins)
+     }
+ 
+     // MARK: - Private
+diff -ru a/Adyen/UI/Form/FormViewController.swift b/Adyen/UI/Form/FormViewController.swift
+--- a/Adyen/UI/Form/FormViewController.swift	2026-10-14 12:15:27
++++ b/Adyen/UI/Form/FormViewController.swift	2026-10-14 12:15:27
+@@ -281,6 +281,11 @@
+         view.backgroundColor = style.backgroundColor
+         formView.backgroundColor = style.backgroundColor
+         formView.isEmbeddedInScrollView = scrollEnabled
++        // Patched: layout margins never grow with the safe area (FormView does the same for every item).
++        // Embedded in a page, margins that followed the safe area made the form's views in or below the
++        // home-indicator strip grow, move and be measured again without end, which hung the app.
++        view.insetsLayoutMarginsFromSafeArea = false
++        scrollView.insetsLayoutMarginsFromSafeArea = false
+     }
+ 
+     // MARK: - UIResponder

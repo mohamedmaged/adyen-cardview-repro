@@ -1,0 +1,96 @@
+Analysis of sampling AdyenRepro (pid 58139) every 1 millisecond
+Process:         AdyenRepro [58139]
+Path:            /Users/USER/Library/Developer/CoreSimulator/Devices/8353A9E2-18C3-4212-B592-1A2F65BC8021/data/Containers/Bundle/Application/4BAAB50B-0DB8-4B6F-9353-DF31D8493FFA/AdyenRepro.app/AdyenRepro
+Load Address:    0x100704000
+Identifier:      com.example.adyencardviewrepro
+Version:         1.0.0 (1)
+Code Type:       ARM64
+Platform:        iOS Simulator
+Parent Process:  launchd_sim [85822]
+Target Type:     live task
+
+Date/Time:       2026-10-12 23:07:11.486 +0400
+Launch Time:     2026-10-12 23:06:59.310 +0400
+OS Version:      macOS 26.5 (25F71)
+Report Version:  7
+Analysis Tool:   /usr/bin/sample
+Call graph:
+    1179 Thread_21522486   DispatchQueue_1: com.apple.main-thread  (serial)
+    + 1179 start  (in dyld) + 6992  [0x101353e00]
+    +   1179 start_sim  (in dyld_sim) + 20  [0x1014753d0]
+    +     1179 main  (in AdyenRepro) + 116  [0x10070768c]  AppDelegate.swift:0
+    +       1179 ???  (in UIKitCore)  load address 0x185156000 + 0x386098  [0x1854dc098]
+    +         1179 UIApplicationMain  (in UIKitCore) + 124  [0x186263e64]
+    +           1179 -[UIApplication _run]  (in UIKitCore) + 772  [0x18625fc3c]
+    +             1179 GSEventRunModal  (in GraphicsServices) + 116  [0x1925319bc]
+    +               1179 _CFRunLoopRunSpecificWithOptions  (in CoreFoundation) + 496  [0x180446e24]
+    +                 1179 __CFRunLoopRun  (in CoreFoundation) + 2100  [0x18044c2c0]
+    +                   1179 __CFRunLoopDoSource1  (in CoreFoundation) + 480  [0x18044d1f8]
+    +                     1179 __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE1_PERFORM_FUNCTION__  (in CoreFoundation) + 56  [0x18044dbe0]
+    +                       1179 __CFMachPortPerform  (in CoreFoundation) + 164  [0x1804114ac]
+    +                         1179 UC::DriverCore::continueProcessing()  (in UpdateCycle) + 80  [0x2509462b4]
+    +                           1179 schedulerStepScheduledMainSectionContinue  (in UIKitCore) + 56  [0x18617ec90]
+    +                             1179 _UIUpdateSequenceRunNext  (in UIKitCore) + 120  [0x185773878]
+    +                               1179 __setupUpdateSequence_block_invoke_2  (in UIKitCore) + 372  [0x18617e834]
+    +                                 1179 _UIApplicationFlushCATransaction  (in UIKitCore) + 48  [0x18625e368]
+    +                                   1179 CA::Transaction::flush_as_runloop_observer(bool)  (in QuartzCore) + 68  [0x18c5b2c8c]
+    +                                     1179 CA::Transaction::commit()  (in QuartzCore) + 636  [0x18c5b16e0]
+    +                                       1179 CA::Context::commit_transaction(CA::Transaction*, double, double*)  (in QuartzCore) + 544  [0x18c581804]
+    +                                         1179 CA::Layer::layout_and_display_if_needed(CA::Transaction*)  (in QuartzCore) + 176  [0x18c669f14]
+    +                                           1175 CA::Layer::update_if_needed(CA::Transaction*, unsigned int, unsigned int)  (in QuartzCore) + 536  [0x18c65e48c]
+    +                                           ! 1175 CA::Layer::perform_update_(CA::Layer*, CALayer*, unsigned int, CA::Transaction*)  (in QuartzCore) + 348  [0x18c65eb1c]
+    +                                           !   574 -[UIView(CALayerDelegate) layoutSublayersOfLayer:]  (in UIKitCore) + 2504  [0x1868494bc]
+    +                                           !   : 574 ???  (in UIKitCore)  load address 0x185156000 + 0x3895f0  [0x1854df5f0]
+    +                                           !   :   570 ???  (in UIKitCore)  load address 0x185156000 + 0x389290  [0x1854df290]
+    +                                           !   :   | 540 -[UIView(Hierarchy) layoutSubviews]  (in UIKitCore) + 200  [0x18683a5d4]
+    +                                           !   :   | + 537 -[UIView _updateConstraintsAsNecessaryAndApplyLayoutFromEngine]  (in UIKitCore) + 768  [0x18683a2d0]
+    +                                           !   :   | + ! 537 -[UIView(AdditionalLayoutSupport) _is_layout]  (in UIKitCore) + 104  [0x186759a5c]
+    +                                           !   :   | + !   534 -[UIView(Geometry) resizeSubviewsWithOldSize:]  (in UIKitCore) + 96  [0x186834d24]
+    +                                           !   :   | + !   : 490 -[__NSSingleObjectArrayI enumerateObjectsWithOptions:usingBlock:]  (in CoreFoundation) + 88  [0x18053a2e8]
+    +                                           !   :   | + !   : | 490 __NSARRAY_IS_CALLING_OUT_TO_A_BLOCK__  (in CoreFoundation) + 16  [0x18045172c]
+    +                                           !   :   | + !   : |   490 -[UIView(Geometry) _resizeWithOldSuperviewSize:]  (in UIKitCore) + 152  [0x186835714]
+    +                                           !   :   | + !   : |     287 -[UIView(Geometry) _applyISEngineLayoutValuesToBoundsOnly:]  (in UIKitCore) + 448  [0x1868353d4]
+    +                                           !   :   | + !   : |     + 253 -[UIView(Geometry) setBounds:]  (in UIKitCore) + 952  [0x186835eb8]
+    +                                           !   :   | + !   : |     + ! 252 -[UIView _updateInferredLayoutMarginsFromSuperview:]  (in UIKitCore) + 404  [0x186820804]
+    +                                           !   :   | + !   : |     + ! : 174 -[UIView _updateInferredLayoutMarginsFromSuperview:]  (in UIKitCore) + 404  [0x186820804]
+    +                                           !   :   | + !   : |     + ! : | 120 -[UIView _updateInferredLayoutMarginsFromSuperview:]  (in UIKitCore) + 404  [0x186820804]
+    +                                           !   :   | + !   : |     + ! : | + 50 -[UIView _updateInferredLayoutMarginsFromSuperview:]  (in UIKitCore) + 220  [0x18682074c]
+    +                                           !   :   | + !   : |     + ! : | + ! 18 _UIViewAdjustedLayoutMarginsForLayoutMargins  (in UIKitCore) + 644  [0x186820b60]
+    +                                           !   :   | + !   : |     + ! : | + ! : 17 -[UIView _nsis_compatibleBoundsInEngine:]  (in UIKitCore) + 120  [0x186753f7c]
+    +                                           !   :   | + !   : |     + ! : | + ! : | 8 -[UIView _nsis_center:bounds:inEngine:forLayoutGuide:]  (in UIKitCore) + 168  [0x18675a388]
+    +                                           !   :   | + !   : |     + ! : | + ! : | + 3 -[UIView(Internal) _currentScreenScale]  (in UIKitCore) + 56  [0x186846890]
+    +                                           !   :   | + !   : |     + ! : | + ! : | + ! 1 objc_retain  (in libobjc.A.dylib) + 36  [0x18007106c]
+    +                                           !   :   | + !   : |     + ! : | + ! : | + ! 1 objc_retainAutoreleaseReturnValue  (in libobjc.A.dylib) + 172  [0x18009b374]
+    +                                           !   :   | + !   : |     + ! : | + ! : | + ! : 1 pthread_setspecific  (in libsystem_pthread.dylib) + 0  [0x1018a5ab0]
+    +                                           !   :   | + !   : |     + ! : | + ! : | + ! 1 objc_retainAutoreleaseReturnValue  (in libobjc.A.dylib) + 204  [0x18009b394]
+    +                                           !   :   | + !   : |     + ! : | + ! : | + !   1 pthread_setspecific  (in libsystem_pthread.dylib) + 64  [0x1018a5af0]
+    +                                           !   :   | + !   : |     + ! : | + ! : | + 3 -[UIView(Internal) _currentScreenScale]  (in UIKitCore) + 68  [0x18684689c]
+    +                                           !   :   | + !   : |     + ! : | + ! : | + ! 2 -[UITraitCollection displayScale]  (in UIKitCore) + 24  [0x185e17a64]
+    +                                           !   :   | + !   : |     + ! : | + ! : | + ! : 1 _UIRecordTraitUsage  (in UIKitCore) + 28  [0x185e109d8]
+    +                                           !   :   | + !   : |     + ! : | + ! : | + ! : 1 _UITraitTokenSetInsert  (in UIKitCore) + 84  [0x1865d3f80]
+    +                                           !   :   | + !   : |     + ! : | + ! : | + ! 1 _UITraitTokenSetInsert  (in UIKitCore) + 480  [0x1865d410c]
+    +                                           !   :   | + !   : |     + ! : | + ! : | + 1 -[UIView(Internal) _currentScreenScale]  (in UIKitCore) + 60  [0x186846894]
+    +                                           !   :   | + !   : |     + ! : | + ! : | + ! 1 DYLD-STUB$$objc_claimAutoreleasedReturnValue  (in UIKitCore) + 4  [0x186934040]
+    +                                           !   :   | + !   : |     + ! : | + ! : | + 1 objc_msgSend  (in libobjc.A.dylib) + 40  [0x180072c28]
+    +                                           !   :   | + !   : |     + ! : | + ! : | 2 -[UIView _nsis_center:bounds:inEngine:forLayoutGuide:]  (in UIKitCore) + 212  [0x18675a3b4]
+    +                                           !   :   | + !   : |     + ! : | + ! : | + 1 -[NSISEngine hasValue:forEngineVar:]  (in CoreAutoLayout) + 96  [0x1e3e51b80]
+[...]
+Sort by top of stack, same collapsed (when >= 5):
+        mach_msg2_trap  (in libsystem_kernel.dylib)        3537
+        __workq_kernreturn  (in libsystem_kernel.dylib)        2358
+        __psynch_cvwait  (in libsystem_kernel.dylib)        1179
+        objc_msgSend  (in libobjc.A.dylib)        204
+        pthread_setspecific  (in libsystem_pthread.dylib)        109
+        DYLD-STUB$$pthread_setspecific  (in libobjc.A.dylib)        42
+        DYLD-STUB$$pthread_getspecific  (in libobjc.A.dylib)        35
+        pthread_getspecific  (in libsystem_pthread.dylib)        27
+        objc_retain  (in libobjc.A.dylib)        22
+        mach_o::Platform::Platform(unsigned int)  (in dyld_sim)        20
+        -[UIView _updateInferredLayoutMarginsFromSuperview:]  (in UIKitCore)        19
+        dyld4::APIs::dyld_program_sdk_at_least(dyld_build_version_t)  (in dyld_sim)        17
+        _UIViewAdjustedLayoutMarginsForLayoutMargins  (in UIKitCore)        16
+[...] Lines of the full sample that name:
+  attachChildViewControllerIfNeeded: 0
+  _updateInferredLayoutMarginsFromSuperview: 140
+  _UIViewAdjustedLayoutMarginsForLayoutMargins: 177
+  _safeAreaInsetsForFrame:inSuperview:: 68
